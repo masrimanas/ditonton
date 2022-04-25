@@ -44,7 +44,7 @@ void main() {
   });
 
   blocTest<SearchBloc, SearchState>(
-      'should emit [Loading, Hasdata] when data is obtained sucessfulle',
+      'should emit [Loading, HasData] when data is obtained sucessfulle',
       build: () {
         when(mockSearchMovies.execute(tQuery))
             .thenAnswer((_) async => Right(tMovieList));
