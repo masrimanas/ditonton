@@ -13,9 +13,9 @@ import 'package:ditonton/domain/usecases/get_watchlist_movies_status.dart';
 import 'package:ditonton/domain/usecases/remove_watchlist_movies.dart';
 import 'package:ditonton/domain/usecases/save_watchlist_movies.dart';
 import 'package:ditonton/domain/usecases/search_movies.dart';
+import 'package:ditonton/presentation/bloc/search_bloc.dart';
 import 'package:ditonton/presentation/provider/movies/movie_detail_notifier.dart';
 import 'package:ditonton/presentation/provider/movies/movie_list_notifier.dart';
-import 'package:ditonton/presentation/provider/movies/movie_search_notifier.dart';
 import 'package:ditonton/presentation/provider/movies/popular_movies_notifier.dart';
 import 'package:ditonton/presentation/provider/movies/top_rated_movies_notifier.dart';
 import 'package:ditonton/presentation/provider/movies/watchlist_movie_notifier.dart';
@@ -79,8 +79,8 @@ void init() {
     ),
   );
   locator.registerFactory(
-    () => MovieSearchNotifier(
-      searchMovies: locator(),
+    () => SearchBloc(
+      locator(),
     ),
   );
   locator.registerFactory(
