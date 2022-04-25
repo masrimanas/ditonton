@@ -1,0 +1,26 @@
+{
+  "dates": {
+    "maximum": "2022-04-21",
+    "minimum": "2022-04-05"
+  },
+  "page": 1,
+  "results": [
+    {
+      "backdrop_path": "/path.jpg",
+      "first_air_date": "2022-03-30",
+      "genre_ids": [10759, 10765, 18],
+      "id": 92749,
+      "name": "Moon Knight",
+      "origin_country": ["US"],
+      "original_language": "en",
+      "original_name": "Moon Knight",
+      "overview": "When Steven Grant.",
+      "popularity": 8810.128,
+      "poster_path": "/path.jpg",
+      "vote_average": 8.6,
+      "vote_count": 313
+    }
+  ],
+  "total_pages": 6428,
+  "total_results": 128550
+}
