@@ -2,22 +2,21 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:ditonton/domain/entities/movie.dart';
 import 'package:ditonton/domain/usecases/search_movies.dart';
-import 'package:ditonton/presentation/bloc/search_bloc.dart';
+import 'package:ditonton/presentation/bloc/movies/search_movie/search_movie_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:dartz/dartz.dart';
 
-import 'search_bloc_test.mocks.dart';
+import 'search_movie_bloc_test.mocks.dart';
 
 @GenerateMocks([SearchMovies])
 void main() {
-  late SearchBloc searchBloc;
+  late SearchMovieBloc searchMovieBloc;
   late MockSearchMovies mockSearchMovies;
 
   setUp(() {
     mockSearchMovies = MockSearchMovies();
-    searchBloc = SearchBloc(mockSearchMovies);
+    searchMovieBloc = SearchMovieBloc(mockSearchMovies);
   });
 
   final tMovieModel = Movie(
@@ -40,18 +39,18 @@ void main() {
   final tQuery = 'spiderman';
 
   test('initial state should empty', () {
-    expect(searchBloc.state, SearchEmpty());
+    expect(searchMovieBloc.state, SearchEmpty());
   });
 
-  blocTest<SearchBloc, SearchState>(
+  blocTest<SearchMovieBloc, SearchState>(
       'should emit [Loading, HasData] when data is obtained sucessfulle',
       build: () {
         when(mockSearchMovies.execute(tQuery))
             .thenAnswer((_) async => Right(tMovieList));
-        return searchBloc;
+        return searchMovieBloc;
       },
       act: (bloc) => bloc.add(OnQueryChanged(tQuery)),
-      wait: const Duration(milliseconds: 100),
+      wait: const Duration(milliseconds: 750),
       expect: () => [
             SearchLoading(),
             SearchHasData(tMovieList),
