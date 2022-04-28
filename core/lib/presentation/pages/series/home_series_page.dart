@@ -1,12 +1,12 @@
-import 'package:about/about.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:core/utils/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:search/presentation/pages/series/search_page_series.dart';
 
 import '../../../domain/entities/series.dart';
 import '../../../presentation/pages/series/series_detail_page.dart';
 import '../../../presentation/pages/series/popular_series_page.dart';
-import '../../../presentation/pages/series/search_page_series.dart';
 import '../../../presentation/pages/series/top_rated_series_page.dart';
 import '../../../presentation/pages/series/watchlist_series_page.dart';
 import '../../../presentation/provider/series/series_list_notifier.dart';
@@ -68,7 +68,7 @@ class _HomeSeriesPageState extends State<HomeSeriesPage> {
             ),
             ListTile(
               onTap: () {
-                Navigator.pushNamed(context, AboutPage.ROUTE_NAME);
+                Navigator.pushNamed(context, ABOUT_ROUTE);
               },
               leading: Icon(Icons.info_outline),
               title: Text('About'),

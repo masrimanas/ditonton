@@ -1,13 +1,12 @@
-import 'package:about/about.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:search/presentation/pages/movies/search_page_movies.dart';
 
 import '../../../domain/entities/movie.dart';
 import '../../../presentation/pages/series/home_series_page.dart';
 import '../../../presentation/pages/movies/movie_detail_page.dart';
 import '../../../presentation/pages/movies/popular_movies_page.dart';
-import '../../../presentation/pages/movies/search_page_movies.dart';
 import '../../../presentation/pages/movies/top_rated_movies_page.dart';
 import '../../../presentation/pages/movies/watchlist_movies_page.dart';
 import '../../../presentation/provider/movies/movie_list_notifier.dart';
