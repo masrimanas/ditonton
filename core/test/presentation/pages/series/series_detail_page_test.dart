@@ -1,27 +1,53 @@
-import 'package:core/domain/entities/series.dart';
+import 'package:bloc_test/bloc_test.dart';
+import 'package:core/presentation/bloc/series/series_detail/series_detail_bloc.dart';
+import 'package:core/presentation/bloc/series/series_recommendations/series_recommendations_bloc.dart';
+import 'package:core/presentation/bloc/series/watchlist_series/watchlist_series_bloc.dart';
 import 'package:core/presentation/pages/series/series_detail_page.dart';
-import 'package:core/presentation/provider/series/series_detail_notifier.dart';
 import 'package:core/utils/state_enum.dart';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
-import 'package:provider/provider.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../../dummy_data/dummy_objects.dart';
-import 'series_detail_page_test.mocks.dart';
 
-@GenerateMocks([SeriesDetailNotifier])
+class FakeSeriesDetailBloc
+    extends MockBloc<SeriesDetailEvent, SeriesDetailState>
+    implements SeriesDetailBloc {}
+
+class FakeSeriesRecommendationsBloc
+    extends MockBloc<SeriesRecommendationsEvent, SeriesRecommendationsState>
+    implements SeriesRecommendationsBloc {}
+
+class FakeWatchlistSeriesBloc
+    extends MockBloc<WatchlistSeriesEvent, WatchlistSeriesState>
+    implements WatchlistSeriesBloc {}
+
 void main() {
-  late MockSeriesDetailNotifier mockNotifier;
+  late FakeSeriesDetailBloc fakeSeriesDetailBloc;
+  late FakeSeriesRecommendationsBloc fakeSeriesRecommendationsBloc;
+  late FakeWatchlistSeriesBloc fakeWatchlistSeriesBloc;
 
-  setUp(() {
-    mockNotifier = MockSeriesDetailNotifier();
+  setUpAll(() {
+    fakeSeriesDetailBloc = FakeSeriesDetailBloc();
+    fakeSeriesRecommendationsBloc = FakeSeriesRecommendationsBloc();
+    fakeWatchlistSeriesBloc = FakeWatchlistSeriesBloc();
   });
 
   Widget _makeTestableWidget(Widget body) {
-    return ChangeNotifierProvider<SeriesDetailNotifier>.value(
-      value: mockNotifier,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<SeriesDetailBloc>(
+          create: (_) => fakeSeriesDetailBloc,
+        ),
+        BlocProvider<SeriesRecommendationsBloc>(
+          create: (_) => fakeSeriesRecommendationsBloc,
+        ),
+        BlocProvider<WatchlistSeriesBloc>(
+          create: (_) => fakeWatchlistSeriesBloc,
+        ),
+      ],
       child: MaterialApp(
         home: body,
       ),
@@ -29,13 +55,14 @@ void main() {
   }
 
   testWidgets(
-      'Watchlist button should display add icon when series not added to watchlist',
+      'Watchlist button should display add icon when movie not added to watchlist',
       (WidgetTester tester) async {
-    when(mockNotifier.seriesState).thenReturn(RequestState.Loaded);
-    when(mockNotifier.series).thenReturn(testSeriesDetail);
-    when(mockNotifier.recommendationState).thenReturn(RequestState.Loaded);
-    when(mockNotifier.seriesRecommendations).thenReturn(<Series>[]);
-    when(mockNotifier.isAddedToWatchlist).thenReturn(false);
+    when(() => fakeSeriesDetailBloc.state)
+        .thenReturn(SeriesDetailHasData(testSeriesDetail));
+    when(() => fakeSeriesRecommendationsBloc.state)
+        .thenReturn(SeriesRecommendationsHasData(testSeriesList));
+    when(() => fakeWatchlistSeriesBloc.state)
+        .thenReturn(SeriesIsInWatchlist(false));
 
     final watchlistButtonIcon = find.byIcon(Icons.add);
 
@@ -45,13 +72,14 @@ void main() {
   });
 
   testWidgets(
-      'Watchlist button should dispay check icon when series is added to wathclist',
+      'Watchlist button should dispay check icon when movie is added to wathclist',
       (WidgetTester tester) async {
-    when(mockNotifier.seriesState).thenReturn(RequestState.Loaded);
-    when(mockNotifier.series).thenReturn(testSeriesDetail);
-    when(mockNotifier.recommendationState).thenReturn(RequestState.Loaded);
-    when(mockNotifier.seriesRecommendations).thenReturn(<Series>[]);
-    when(mockNotifier.isAddedToWatchlist).thenReturn(true);
+    when(() => fakeSeriesDetailBloc.state)
+        .thenReturn(SeriesDetailHasData(testSeriesDetail));
+    when(() => fakeSeriesRecommendationsBloc.state)
+        .thenReturn(SeriesRecommendationsHasData(testSeriesList));
+    when(() => fakeWatchlistSeriesBloc.state)
+        .thenReturn(SeriesIsInWatchlist(true));
 
     final watchlistButtonIcon = find.byIcon(Icons.check);
 
@@ -63,12 +91,14 @@ void main() {
   testWidgets(
       'Watchlist button should display Snackbar when added to watchlist',
       (WidgetTester tester) async {
-    when(mockNotifier.seriesState).thenReturn(RequestState.Loaded);
-    when(mockNotifier.series).thenReturn(testSeriesDetail);
-    when(mockNotifier.recommendationState).thenReturn(RequestState.Loaded);
-    when(mockNotifier.seriesRecommendations).thenReturn(<Series>[]);
-    when(mockNotifier.isAddedToWatchlist).thenReturn(false);
-    when(mockNotifier.watchlistMessage).thenReturn('Added to Watchlist');
+    when(() => fakeSeriesDetailBloc.state)
+        .thenReturn(SeriesDetailHasData(testSeriesDetail));
+    when(() => fakeSeriesRecommendationsBloc.state)
+        .thenReturn(SeriesRecommendationsHasData(testSeriesList));
+    when(() => fakeWatchlistSeriesBloc.state)
+        .thenReturn(SeriesIsInWatchlist(true));
+    when(() => fakeWatchlistSeriesBloc.state)
+        .thenReturn(WatchlistSeriesMessage('Added to Watchlist'));
 
     final watchlistButton = find.byType(ElevatedButton);
 
@@ -81,28 +111,5 @@ void main() {
 
     expect(find.byType(SnackBar), findsOneWidget);
     expect(find.text('Added to Watchlist'), findsOneWidget);
-  });
-
-  testWidgets(
-      'Watchlist button should display AlertDialog when add to watchlist failed',
-      (WidgetTester tester) async {
-    when(mockNotifier.seriesState).thenReturn(RequestState.Loaded);
-    when(mockNotifier.series).thenReturn(testSeriesDetail);
-    when(mockNotifier.recommendationState).thenReturn(RequestState.Loaded);
-    when(mockNotifier.seriesRecommendations).thenReturn(<Series>[]);
-    when(mockNotifier.isAddedToWatchlist).thenReturn(false);
-    when(mockNotifier.watchlistMessage).thenReturn('Failed');
-
-    final watchlistButton = find.byType(ElevatedButton);
-
-    await tester.pumpWidget(_makeTestableWidget(SeriesDetailPage(id: 1)));
-
-    expect(find.byIcon(Icons.add), findsOneWidget);
-
-    await tester.tap(watchlistButton);
-    await tester.pump();
-
-    expect(find.byType(AlertDialog), findsOneWidget);
-    expect(find.text('Failed'), findsOneWidget);
   });
 }

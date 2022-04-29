@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:core/utils/routes.dart';
+import 'package:core/presentation/bloc/series/on_going_series/on_going_series_bloc.dart';
+import 'package:core/presentation/bloc/series/popular_series/popular_series_bloc.dart';
+import 'package:core/presentation/bloc/series/top_rated_series/top_rated_series_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:search/presentation/pages/series/search_page_series.dart';
 
 import '../../../domain/entities/series.dart';
@@ -9,14 +11,12 @@ import '../../../presentation/pages/series/series_detail_page.dart';
 import '../../../presentation/pages/series/popular_series_page.dart';
 import '../../../presentation/pages/series/top_rated_series_page.dart';
 import '../../../presentation/pages/series/watchlist_series_page.dart';
-import '../../../presentation/provider/series/series_list_notifier.dart';
 import '../../../styles/text_styles.dart';
 import '../../../utils/constants.dart';
-import '../../../utils/state_enum.dart';
+import '../../../utils/routes.dart';
 
 class HomeSeriesPage extends StatefulWidget {
   static const ROUTE = '/home-series';
-
   @override
   _HomeSeriesPageState createState() => _HomeSeriesPageState();
 }
@@ -25,11 +25,11 @@ class _HomeSeriesPageState extends State<HomeSeriesPage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(
-        () => Provider.of<SeriesListNotifier>(context, listen: false)
-          ..fetchOnGoingSeries()
-          ..fetchPopularSeries()
-          ..fetchTopRatedSeries());
+    Future.microtask(() {
+      context.read<OnGoingSeriesBloc>().add(LoadOnGoingSeries());
+      context.read<PopularSeriesBloc>().add(LoadPopularSeries());
+      context.read<TopRatedSeriesBloc>().add(LoadTopRatedSeries());
+    });
   }
 
   @override
@@ -94,17 +94,17 @@ class _HomeSeriesPageState extends State<HomeSeriesPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'On Going',
+                'Now Playing',
                 style: kHeading6,
               ),
-              Consumer<SeriesListNotifier>(builder: (context, data, child) {
-                final state = data.onGoingState;
-                if (state == RequestState.Loading) {
+              BlocBuilder<OnGoingSeriesBloc, OnGoingSeriesState>(
+                  builder: (context, state) {
+                if (state is OnGoingSeriesLoading) {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
-                } else if (state == RequestState.Loaded) {
-                  return SeriesList(data.onGoingSeries);
+                } else if (state is OnGoingSeriesHasData) {
+                  return SeriesList(state.result);
                 } else {
                   return Text('Failed');
                 }
@@ -114,14 +114,14 @@ class _HomeSeriesPageState extends State<HomeSeriesPage> {
                 onTap: () =>
                     Navigator.pushNamed(context, PopularSeriesPage.ROUTE_NAME),
               ),
-              Consumer<SeriesListNotifier>(builder: (context, data, child) {
-                final state = data.popularSeriesState;
-                if (state == RequestState.Loading) {
+              BlocBuilder<PopularSeriesBloc, PopularSeriesState>(
+                  builder: (context, state) {
+                if (state is PopularSeriesLoading) {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
-                } else if (state == RequestState.Loaded) {
-                  return SeriesList(data.popularSeries);
+                } else if (state is PopularSeriesHasData) {
+                  return SeriesList(state.result);
                 } else {
                   return Text('Failed');
                 }
@@ -131,14 +131,14 @@ class _HomeSeriesPageState extends State<HomeSeriesPage> {
                 onTap: () =>
                     Navigator.pushNamed(context, TopRatedSeriesPage.ROUTE_NAME),
               ),
-              Consumer<SeriesListNotifier>(builder: (context, data, child) {
-                final state = data.topRatedSeriesState;
-                if (state == RequestState.Loading) {
+              BlocBuilder<TopRatedSeriesBloc, TopRatedSeriesState>(
+                  builder: (context, state) {
+                if (state is TopRatedSeriesLoading) {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
-                } else if (state == RequestState.Loaded) {
-                  return SeriesList(data.topRatedSeries);
+                } else if (state is TopRatedSeriesHasData) {
+                  return SeriesList(state.result);
                 } else {
                   return Text('Failed');
                 }
