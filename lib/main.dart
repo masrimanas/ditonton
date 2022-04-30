@@ -25,6 +25,7 @@ import 'package:core/presentation/pages/series/watchlist_series_page.dart';
 import 'package:core/styles/colors.dart';
 import 'package:core/styles/text_styles.dart';
 import 'package:core/utils/routes.dart';
+import 'package:core/utils/ssl_pinning.dart';
 import 'package:ditonton/injection.dart' as di;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,8 @@ import 'package:search/presentation/bloc/series/search_series/search_series_bloc
 import 'package:search/presentation/pages/movies/search_page_movies.dart';
 import 'package:search/presentation/pages/series/search_page_series.dart';
 
-void main() {
+void main() async {
+  await SslPinning.init();
   di.init();
   runApp(MyApp());
 }

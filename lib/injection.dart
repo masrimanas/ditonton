@@ -37,12 +37,12 @@ import 'package:core/presentation/bloc/series/series_detail/series_detail_bloc.d
 import 'package:core/presentation/bloc/series/series_recommendations/series_recommendations_bloc.dart';
 import 'package:core/presentation/bloc/series/top_rated_series/top_rated_series_bloc.dart';
 import 'package:core/presentation/bloc/series/watchlist_series/watchlist_series_bloc.dart';
+import 'package:core/utils/ssl_pinning.dart';
 import 'package:search/domain/usecases/search_movies.dart';
 import 'package:search/domain/usecases/search_series.dart';
 import 'package:search/presentation/bloc/movies/search_movie/search_movie_bloc.dart';
 import 'package:search/presentation/bloc/series/search_series/search_series_bloc.dart';
 
-import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart';
 
 final locator = GetIt.instance;
@@ -177,5 +177,5 @@ void init() {
   locator.registerLazySingleton<DatabaseHelper>(() => DatabaseHelper());
 
   // external
-  locator.registerLazySingleton(() => http.Client());
+  locator.registerLazySingleton(() => SslPinning.client);
 }
