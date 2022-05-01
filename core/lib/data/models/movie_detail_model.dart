@@ -118,6 +118,7 @@ class MovieDetailResponse extends Equatable {
   }
 
   @override
+  // ignore: todo
   // TODO: implement props
   List<Object?> get props => [
         adult,

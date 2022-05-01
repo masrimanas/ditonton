@@ -1,10 +1,8 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:core/domain/entities/movie.dart';
 import 'package:core/presentation/bloc/movies/movie_detail/movie_detail_bloc.dart';
 import 'package:core/presentation/bloc/movies/movie_recommendations/movie_recommendations_bloc.dart';
 import 'package:core/presentation/bloc/movies/watchlist_movies/watchlist_movies_bloc.dart';
 import 'package:core/presentation/pages/movies/movie_detail_page.dart';
-import 'package:core/utils/state_enum.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

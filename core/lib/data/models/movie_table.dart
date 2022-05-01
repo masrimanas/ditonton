@@ -45,6 +45,7 @@ class MovieTable extends Equatable {
       );
 
   @override
+  // ignore: todo
   // TODO: implement props
   List<Object?> get props => [id, title, posterPath, overview];
 }

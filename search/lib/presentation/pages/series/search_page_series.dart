@@ -1,9 +1,7 @@
 import 'package:core/styles/text_styles.dart';
 import 'package:core/presentation/widgets/series_card_list.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 import '../../../presentation/bloc/series/search_series/search_series_bloc.dart';
 

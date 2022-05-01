@@ -5,7 +5,6 @@ import 'package:core/domain/entities/series_detail.dart';
 import 'package:core/domain/usecases/get_watchlist_series_status.dart';
 import 'package:core/domain/usecases/remove_watchlist_series.dart';
 import 'package:core/domain/usecases/save_watchlist_series.dart';
-import 'package:core/presentation/bloc/series/watchlist_series/watchlist_series_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 

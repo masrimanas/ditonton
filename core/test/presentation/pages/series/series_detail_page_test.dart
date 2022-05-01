@@ -3,7 +3,6 @@ import 'package:core/presentation/bloc/series/series_detail/series_detail_bloc.d
 import 'package:core/presentation/bloc/series/series_recommendations/series_recommendations_bloc.dart';
 import 'package:core/presentation/bloc/series/watchlist_series/watchlist_series_bloc.dart';
 import 'package:core/presentation/pages/series/series_detail_page.dart';
-import 'package:core/utils/state_enum.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
