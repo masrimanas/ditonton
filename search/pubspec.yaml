@@ -14,6 +14,7 @@ dependencies:
   core:
     path: ../core
   dartz: ^0.10.0-nullsafety.2
+  firebase_crashlytics: ^2.2.4
   flutter:
     sdk: flutter
 

@@ -27,6 +27,7 @@ import 'package:core/styles/text_styles.dart';
 import 'package:core/utils/routes.dart';
 import 'package:core/utils/ssl_pinning.dart';
 import 'package:ditonton/injection.dart' as di;
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,6 +37,8 @@ import 'package:search/presentation/pages/movies/search_page_movies.dart';
 import 'package:search/presentation/pages/series/search_page_series.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await SslPinning.init();
   di.init();
   runApp(MyApp());
