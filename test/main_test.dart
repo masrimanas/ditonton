@@ -2,7 +2,7 @@ import 'package:core/data/models/movie_model.dart';
 import 'package:core/domain/entities/movie.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-// This lines of code are used to avoid CodeMagic Test failure
+// These lines of code are used to avoid CodeMagic Test failure
 void main() {
   final tMovieModel = MovieModel(
     adult: false,
@@ -38,7 +38,7 @@ void main() {
     voteCount: 13507,
   );
 
-  test('should be subclass of Movie entity', () async {
+  test('should be a subclass of Movie entity', () async {
     final result = tMovieModel.toEntity();
     expect(result, tMovie);
   });

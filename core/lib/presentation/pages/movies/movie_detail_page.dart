@@ -117,9 +117,12 @@ class _DetailContentState extends State<DetailContent> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              widget.movie.title,
-                              style: kHeading5,
+                            Flexible(
+                              child: Text(
+                                widget.movie.title,
+                                overflow: TextOverflow.ellipsis,
+                                style: kHeading5,
+                              ),
                             ),
                             ElevatedButton(
                               onPressed: () async {

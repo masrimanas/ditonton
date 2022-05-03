@@ -121,9 +121,12 @@ class _DetailContentState extends State<DetailContent> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  widget.series.name,
-                                  style: kHeading5,
+                                Flexible(
+                                  child: Text(
+                                    widget.series.name,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: kHeading5,
+                                  ),
                                 ),
                                 Container(
                                   decoration: BoxDecoration(
