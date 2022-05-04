@@ -12,7 +12,7 @@ import '../../../styles/colors.dart';
 import '../../../styles/text_styles.dart';
 
 class MovieDetailPage extends StatefulWidget {
-  static const ROUTE_NAME = '/movies-detail';
+  static const ROUTE_NAME = '/movie-detail';
 
   final int id;
   MovieDetailPage({required this.id});
@@ -38,7 +38,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    final moviesWatchlistStatus =
+    final movieWatchlistStatus =
         context.select<WatchlistMoviesBloc, bool>((bloc) {
       if (bloc.state is MovieIsInWatchlist) {
         return (bloc.state as MovieIsInWatchlist).isInWatchlist;
@@ -53,11 +53,11 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
               child: CircularProgressIndicator(),
             );
           } else if (state is MovieDetailHasData) {
-            final movies = state.result;
+            final movie = state.result;
             return SafeArea(
               child: DetailContent(
-                movies,
-                moviesWatchlistStatus,
+                movie,
+                movieWatchlistStatus,
               ),
             );
           } else {
@@ -70,10 +70,10 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
 }
 
 class DetailContent extends StatefulWidget {
-  final MovieDetail movies;
+  final MovieDetail movie;
   final bool isInWatchlist;
 
-  DetailContent(this.movies, this.isInWatchlist);
+  DetailContent(this.movie, this.isInWatchlist);
 
   @override
   State<DetailContent> createState() => _DetailContentState();
@@ -87,8 +87,7 @@ class _DetailContentState extends State<DetailContent> {
     return Stack(
       children: [
         CachedNetworkImage(
-          imageUrl:
-              'https://image.tmdb.org/t/p/w500${widget.movies.posterPath}',
+          imageUrl: 'https://image.tmdb.org/t/p/w500${widget.movie.posterPath}',
           width: screenWidth,
           placeholder: (context, url) => Center(
             child: CircularProgressIndicator(),
@@ -118,27 +117,19 @@ class _DetailContentState extends State<DetailContent> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    widget.movies.title,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: kHeading5,
-                                  ),
-                                ),
-                              ],
+                            Text(
+                              widget.movie.title,
+                              style: kHeading5,
                             ),
                             ElevatedButton(
                               onPressed: () async {
                                 if (!widget.isInWatchlist) {
                                   context
                                       .read<WatchlistMoviesBloc>()
-                                      .add(AddMovieToWatchlist(widget.movies));
+                                      .add(AddMovieToWatchlist(widget.movie));
                                 } else {
                                   context.read<WatchlistMoviesBloc>().add(
-                                      RemoveMovieFromWatchlist(widget.movies));
+                                      RemoveMovieFromWatchlist(widget.movie));
                                 }
 
                                 final state =
@@ -185,15 +176,15 @@ class _DetailContentState extends State<DetailContent> {
                               ),
                             ),
                             Text(
-                              _showGenres(widget.movies.genres),
+                              _showGenres(widget.movie.genres),
                             ),
                             Text(
-                              _showDuration(widget.movies.runtime),
+                              _showDuration(widget.movie.runtime),
                             ),
                             Row(
                               children: [
                                 RatingBarIndicator(
-                                  rating: widget.movies.voteAverage / 2,
+                                  rating: widget.movie.voteAverage / 2,
                                   itemCount: 5,
                                   itemBuilder: (context, index) => Icon(
                                     Icons.star,
@@ -201,7 +192,7 @@ class _DetailContentState extends State<DetailContent> {
                                   ),
                                   itemSize: 24,
                                 ),
-                                Text('${widget.movies.voteAverage}')
+                                Text('${widget.movie.voteAverage}')
                               ],
                             ),
                             SizedBox(height: 16),
@@ -210,7 +201,7 @@ class _DetailContentState extends State<DetailContent> {
                               style: kHeading6,
                             ),
                             Text(
-                              widget.movies.overview,
+                              widget.movie.overview,
                             ),
                             SizedBox(height: 16),
                             Text(
@@ -233,7 +224,7 @@ class _DetailContentState extends State<DetailContent> {
                                     child: ListView.builder(
                                       scrollDirection: Axis.horizontal,
                                       itemBuilder: (context, index) {
-                                        final movies = state.result[index];
+                                        final movie = state.result[index];
                                         return Padding(
                                           padding: const EdgeInsets.all(4.0),
                                           child: InkWell(
@@ -241,7 +232,7 @@ class _DetailContentState extends State<DetailContent> {
                                               Navigator.pushReplacementNamed(
                                                 context,
                                                 MovieDetailPage.ROUTE_NAME,
-                                                arguments: movies.id,
+                                                arguments: movie.id,
                                               );
                                             },
                                             child: ClipRRect(
@@ -250,7 +241,7 @@ class _DetailContentState extends State<DetailContent> {
                                               ),
                                               child: CachedNetworkImage(
                                                 imageUrl:
-                                                    'https://image.tmdb.org/t/p/w500${movies.posterPath}',
+                                                    'https://image.tmdb.org/t/p/w500${movie.posterPath}',
                                                 placeholder: (context, url) =>
                                                     Center(
                                                   child:
